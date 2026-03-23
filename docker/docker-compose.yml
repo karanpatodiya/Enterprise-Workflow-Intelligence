@@ -1,0 +1,93 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: workforce-intelligence-postgres
+    environment:
+      POSTGRES_DB: workforce_intelligence
+      POSTGRES_USER: ${POSTGRES_USER:-workforce}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-securepassword}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../database/schema:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-workforce}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - workforce-network
+
+  app:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    container_name: workforce-intelligence-app
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-workforce}:${POSTGRES_PASSWORD:-securepassword}@postgres:5432/workforce_intelligence
+      DATABASE_POOL_MIN: 2
+      DATABASE_POOL_MAX: 10
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4-turbo-preview}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-large}
+      VECTOR_STORE_PROVIDER: ${VECTOR_STORE_PROVIDER:-pinecone}
+      PINECONE_API_KEY: ${PINECONE_API_KEY}
+      PINECONE_INDEX_NAME: ${PINECONE_INDEX_NAME:-workforce-intelligence}
+      PINECONE_ENVIRONMENT: ${PINECONE_ENVIRONMENT:-production}
+      RAG_CHUNK_SIZE: 512
+      RAG_CHUNK_OVERLAP: 50
+      RAG_TOP_K_RESULTS: 5
+      RAG_CONFIDENCE_THRESHOLD: 0.7
+      ENABLE_AUDIT_LOGGING: "true"
+      ENABLE_ANALYTICS_CACHE: "true"
+      ANALYTICS_CACHE_TTL_SECONDS: 3600
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ../logs:/app/logs
+    networks:
+      - workforce-network
+    restart: unless-stopped
+
+  # Optional: Pinecone is cloud-based, but adding Weaviate as local alternative
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    container_name: workforce-intelligence-weaviate
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_APIKEY_ENABLED: "false"
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      LOG_LEVEL: error
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - workforce-network
+    restart: unless-stopped
+    profiles:
+      - weaviate
+
+volumes:
+  postgres_data:
+  weaviate_data:
+
+networks:
+  workforce-network:
+    driver: bridge

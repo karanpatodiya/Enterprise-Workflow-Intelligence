@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# env files
+.env
+
+# build outputs
+dist/
+build/
+
+# logs
+logs/
+*.log
+
+# coverage
+coverage/
+
+# temp files
+tmpclaude-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# misc
+*.txt
+migrate_output.txt
