@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# Enterprise Workforce Intelligence & Skill Optimization Platform
+# Enterprise Workforce Intelligence
 
 A production-grade, multi-tenant B2B SaaS backend system for enterprise workforce intelligence, skill diagnosis, and promotion readiness analysis powered by RAG-grounded AI.
 
@@ -650,4 +649,3 @@ User Profile
 → Learning Path Generation
 → Mastery Stage
 → Final Report
->>>>>>> 10cedfa490b651cb04afe6ca58843ca30e44bca9
