@@ -68,7 +68,7 @@ This platform provides closed-loop workforce intelligence through:
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────┴──────────────────────────────────────┐
-│            Integration Layer (Abstractions)                  │
+│           Integration Layer (Abstractions)                  │
 │  ┌────────────────────────────────────────────────────────┐ │
 │  │ RAG Orchestration Service                              │ │
 │  │ • Query -> Embedding conversion                        │ │
@@ -96,21 +96,21 @@ This platform provides closed-loop workforce intelligence through:
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────┴──────────────────────────────────────┐
-│            Repository Layer (Data Access)                    │
-│  • TenantRepository                                          │
-│  • EmployeeRepository                                        │
+│           Repository Layer (Data Access)                    │
+│  • TenantRepository                                         │
+│  • EmployeeRepository                                       │
 │  • AssessmentResultRepository                               │
 │  • KnowledgeDocumentRepository                              │
-│  • All queries enforce tenant isolation                      │
+│  • All queries enforce tenant isolation                     │
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────┴──────────────────────────────────────┐
-│            Data Layer (PostgreSQL)                           │
+│            Data Layer (PostgreSQL)                          │
 │  • Relational data with JSONB for complex structures        │
 │  • Comprehensive audit logging                              │
 │  • Analytics snapshot caching                               │
 │  • Row-level security ready                                 │
-└──────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## Project Structure
