@@ -17,12 +17,12 @@ This platform provides closed-loop workforce intelligence through:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     API Layer Endpoints                      │
-│  /api/assessments  /api/skills  /api/analytics  /api/rag   │
+│                     API Layer Endpoints                     │
+│  /api/assessments  /api/skills  /api/analytics  /api/rag    │
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────┴──────────────────────────────────────┐
-│            Middleware Layer                                  │
+│            Middleware Layer                                 │
 │  • Tenant Resolution & Isolation                            │
 │  • Authentication (JWT)                                     │
 │  • Role-Based Access Control (RBAC)                         │
@@ -30,7 +30,7 @@ This platform provides closed-loop workforce intelligence through:
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────┴──────────────────────────────────────┐
-│            Service Layer (Business Logic)                    │
+│            Service Layer (Business Logic)                   │
 │  ┌────────────────────────────────────────────────────────┐ │
 │  │ Assessment Engine Service                              │ │
 │  │ • Assessment initialization                            │ │
